@@ -45,6 +45,9 @@ gem 'mysql2', '~> 0.5.7'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.6.3'
 
+# Use Active Model has_secure_password
+gem 'bcrypt', '~> 3.1.16'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -57,6 +60,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Faker data generator for testing and development
+  gem 'faker'
 end
 
 group :development do
