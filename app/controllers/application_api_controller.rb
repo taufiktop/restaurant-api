@@ -1,24 +1,13 @@
-class ApplicationAPIController < ActionController::API
+class ApplicationApiController < ActionController::API
   include ActionController::MimeResponds
-  include ActiveStorage::SetCurrent
+  # include ActiveStorage::SetCurrent
   helper ApplicationHelper
   rescue_from StandardError, with: :handle_internal_server_error
 
-  before_action :cors_set_access_control_headers
-  around_action :switch_locale
+  # before_action :cors_set_access_control_headers
+  # around_action :switch_locale
 
-  respond_to :json
-
-  def render_bad_request(resource_or_params, message = "Request parameter not valid")
-    render status: :bad_request, json: {
-      data: {
-        message: message,
-        params: sanitize_options(resource_or_params)
-      },
-      status: "Bad Request",
-      error: true
-    }
-  end
+  # respond_to :json
 
   def render_unauthorized(resource_or_params)
     render status: :unauthorized, json: {
@@ -32,23 +21,11 @@ class ApplicationAPIController < ActionController::API
 
   def render_failed_login(resource_or_params)
     render status: :unauthorized, json: {
-      data: {
-        message: "Wrong email or password",
-        params: sanitize_options(resource_or_params)
-      },
-      status: "Unauthorized",
-      error: true
-    }
-  end
-
-  def render_not_found(resource_or_params)
-    render status: :not_found, json: {
-      data: {
-        message: "404 Not Found",
-        params: sanitize_options(resource_or_params)
-      },
-      status: "Not Found",
-      error: true
+      error: {
+        code: "RESTO-401",
+        status: 401,
+        message: "Wrong email or password"
+      }
     }
   end
 
@@ -83,7 +60,7 @@ class ApplicationAPIController < ActionController::API
     }
   end
 
-  def render_paginated_data_with_serializer(page, limit, data, serializer)
+  def render_paginated_data_with_serializer(page, limit, data, serializer, **options)
     page = page.to_i > 0 ? page.to_i : 1
     limit = [ (limit.to_i > 0 ? limit.to_i : 12), 50 ].min
     paginated_data = data.page(page).per(limit)
@@ -95,7 +72,13 @@ class ApplicationAPIController < ActionController::API
       has_next_page: paginated_data.next_page.present?,
       total: paginated_data.total_count
     }
-    render json: paginated_data, each_serializer: serializer, root: :data, meta: meta
+    serialized_data = ActiveModelSerializers::SerializableResource.new(
+      paginated_data,
+      each_serializer: serializer,
+      **options
+    )
+
+    render json: { data: serialized_data, meta: meta }
   end
 
   def cors_preflight_check
