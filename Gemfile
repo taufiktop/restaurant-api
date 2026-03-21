@@ -63,6 +63,14 @@ group :development, :test do
 
   # Faker data generator for testing and development
   gem 'faker'
+
+  # ActiveModel Serializers for JSON API responses
+  gem 'active_model_serializers'
+
+  # Kaminari for pagination
+  gem 'kaminari'
+
+  gem 'telephone_number'
 end
 
 group :development do
