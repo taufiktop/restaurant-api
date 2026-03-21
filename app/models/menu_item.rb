@@ -1,4 +1,7 @@
 class MenuItem < ApplicationRecord
+  include ApplicationHelper
+  include ValidationHelper
+
   belongs_to :restaurant
   belongs_to :category, optional: true
 
@@ -7,4 +10,13 @@ class MenuItem < ApplicationRecord
 
   scope :available, -> { where(is_available: true) }
   scope :by_category, ->(category) { where(category: category) if category.present? }
+  scope :recently_created, -> { order(created_at: :desc) }
+
+  before_validation :sanitize_input
+
+  private
+
+  def sanitize_input
+    sanitize_from_xcs_and_url %w[name description]
+  end
 end
