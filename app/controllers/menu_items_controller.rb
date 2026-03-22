@@ -1,4 +1,6 @@
 class MenuItemsController < ApplicationApiController
+  include ApplicationHelper
+  
   before_action :authenticate_user!
   before_action :set_restaurant, only: [:index, :create]
   before_action :set_menu_item, only: [:update, :destroy]
@@ -10,7 +12,6 @@ class MenuItemsController < ApplicationApiController
 
     # Determine if we are searching or just listing
     if params[:search].present?
-      byebug
       @menu_items = MenuItem.search(
         params[:search],
         where: filters,
@@ -53,13 +54,13 @@ class MenuItemsController < ApplicationApiController
     def set_restaurant
       @restaurant = Restaurant.find(params[:restaurant_id])
     rescue ActiveRecord::RecordNotFound
-      render json: { error: 'Restaurant not found' }, status: :not_found
+      render_custom_error(code = "RESTO-404", status = 404, message = "Restaurant not found")
     end
 
     def set_menu_item
       @menu_item = MenuItem.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      render json: { error: 'Menu item not found' }, status: :not_found
+      render_custom_error(code = "RESTO-404", status = 404, message = "Menu item not found")
     end
 
     def menu_item_params

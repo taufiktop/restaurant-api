@@ -1,5 +1,11 @@
 class UsersController < ApplicationApiController
+  include ApplicationHelper
+
   def signin
+    unless permitted_params[:email].present? && permitted_params[:password].present?
+      return render_custom_error(code = "RESTO-400", status = 400, message = "Missing required parameters: email and password")
+    end
+
     user = User.signin(permitted_params[:email])
 
     if user.present? && user.authenticate?(permitted_params[:password])
@@ -11,7 +17,7 @@ class UsersController < ApplicationApiController
 
   private
 
-   def permitted_params
-      params.permit(:email, :name, :password, :phone_number)
-    end
+  def permitted_params
+    params.permit(:email, :name, :password)
+  end
 end
