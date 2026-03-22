@@ -2,6 +2,9 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 
+# Disable Searchkick callbacks for tests
+Searchkick.disable_callbacks
+
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers
