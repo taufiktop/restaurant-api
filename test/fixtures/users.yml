@@ -1,0 +1,27 @@
+# test/fixtures/users.yml
+<% require 'bcrypt' %>
+<% password_hash = BCrypt::Password.create('password123') %>
+
+super_admin:
+  email: superadmin@resto.com
+  encrypted_password: <%= password_hash %>
+  name: Super Admin
+  role: super_admin
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
+
+admin_resto_a:
+  email: restaurant_admin1@resto.com
+  encrypted_password: <%= password_hash %>
+  name: Admin Resto A
+  role: admin_restaurant
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
+
+admin_resto_b:
+  email: restaurant_admin2@resto.com
+  encrypted_password: <%= password_hash %>
+  name: Admin Resto B
+  role: admin_restaurant
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>

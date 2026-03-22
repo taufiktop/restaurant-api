@@ -1,0 +1,15 @@
+# test/fixtures/restaurants.yml
+one:
+  name: Resto Satu
+  address: Jl. Satu No. 1
+  phone: 0811111111
+  opening_hours: 09:00
+  closing_hours: 22:00
+
+two:
+  name: Resto Dua
+  address: Jl. Dua No. 2
+  phone: 0822222222
+  opening_hours: 10:00
+  closing_hours: 23:00
+  

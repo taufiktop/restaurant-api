@@ -1,0 +1,12 @@
+# test/fixtures/categories.yml
+appetizer:
+  name: appetizer
+  description: Makanan pembuka
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
+
+main:
+  name: main
+  description: Makanan utama
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>

@@ -1,0 +1,16 @@
+# test/fixtures/menu_items.yml
+nasi_goreng:
+  name: Nasi Goreng
+  description: Nasi goreng spesial
+  price: 35000
+  is_available: true
+  restaurant: one
+  category: appetizer
+
+ayam_bakar:
+  name: Ayam Bakar
+  description: Ayam bakar madu
+  price: 45000
+  is_available: true
+  restaurant: two
+  category: main
