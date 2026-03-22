@@ -80,7 +80,11 @@ group :development, :test do
   # Faker data generator for testing and development
   gem 'faker'
 
+  # Debugging and testing tools
   gem 'byebug'
+
+  # RSpec for testing
+  gem 'rspec-rails'
 end
 
 group :development do
