@@ -14,6 +14,22 @@ class MenuItem < ApplicationRecord
 
   before_validation :sanitize_input
 
+  searchkick
+
+  def search_data
+    {
+      name: name,
+      description: description,
+      price: price,
+      is_available: is_available,
+      restaurant_id: restaurant_id,
+      category_id: category_id,
+      category_name: category&.name,
+      created_at: created_at,
+      updated_at: updated_at
+    }
+  end
+
   private
 
   def sanitize_input

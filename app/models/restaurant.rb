@@ -4,6 +4,8 @@ class Restaurant < ApplicationRecord
 
   has_many :menu_items, dependent: :destroy
 
+  searchkick word_middle: [:name, :address]
+
   before_validation :sanitize_input
 
   validates :name, presence: true, length: { minimum: 5, maximum: 250 }, uniqueness: true

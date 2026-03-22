@@ -6,7 +6,12 @@ class RestaurantsController < ApplicationApiController
 
   # GET /restaurants
   def index
-    data = Restaurant.all.recently_created
+    if params[:search].present?
+      data = Restaurant.search(params[:search], order: { created_at: :desc })
+    else
+      data = Restaurant.all.recently_created
+    end
+
     render_paginated_data_with_serializer(params[:page], params[:limit], data, RestaurantSerializer)
   end
 

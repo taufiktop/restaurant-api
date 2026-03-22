@@ -5,11 +5,23 @@ class MenuItemsController < ApplicationApiController
 
   # GET /restaurants/:restaurant_id/menu_items
   def index
-    @menu_items = @restaurant.menu_items
-    @menu_items = @menu_items.by_category(params[:category_id]) if params[:category_id].present?
+    filters = { restaurant_id: @restaurant.id }
+    filters[:category_id] = params[:category_id] if params[:category_id].present?
 
-    data = @menu_items.recently_created
-    render_paginated_data_with_serializer(params[:page], params[:limit], data, MenuItemSerializer)
+    # Determine if we are searching or just listing
+    if params[:search].present?
+      byebug
+      @menu_items = MenuItem.search(
+        params[:search],
+        where: filters,
+        fields: [:name],
+        order: { created_at: :desc }
+      )
+    else
+      @menu_items = MenuItem.where(filters).recently_created
+    end
+
+    render_paginated_data_with_serializer(params[:page], params[:limit], @menu_items, MenuItemSerializer)
   end
 
   # POST /restaurants/:restaurant_id/menu_items
