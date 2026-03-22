@@ -12,6 +12,12 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
+  resources :users, only: [] do
+    collection do
+      post :signin
+    end
+  end
+
   resources :restaurants do
     resources :menu_items, only: [:index, :create]
   end

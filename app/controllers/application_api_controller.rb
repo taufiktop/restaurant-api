@@ -111,7 +111,7 @@ class ApplicationApiController < ActionController::API
       render_unauthorized({}) && return
     else
       user = get_user(token)
-      sign_in(user)
+      # sign_in(user) if using Devise or similar authentication system
     end
   end
 
@@ -121,7 +121,7 @@ class ApplicationApiController < ActionController::API
       false
     else
       user = get_user(token)
-      sign_in(user)
+      # sign_in(user) if using Devise or similar authentication system
     end
   end
 

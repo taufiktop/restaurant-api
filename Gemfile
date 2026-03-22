@@ -48,6 +48,18 @@ gem 'pg', '~> 1.6.3'
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.16'
 
+# ActiveModel Serializers for JSON API responses
+gem 'active_model_serializers'
+
+# Kaminari for pagination
+gem 'kaminari'
+
+# For phone number validation and formatting
+gem 'telephone_number'
+
+# JWT for token-based authentication
+gem 'jwt'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -64,13 +76,7 @@ group :development, :test do
   # Faker data generator for testing and development
   gem 'faker'
 
-  # ActiveModel Serializers for JSON API responses
-  gem 'active_model_serializers'
-
-  # Kaminari for pagination
-  gem 'kaminari'
-
-  gem 'telephone_number'
+  gem 'byebug'
 end
 
 group :development do

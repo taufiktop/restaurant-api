@@ -1,6 +1,7 @@
 class RestaurantsController < ApplicationApiController
   include ApplicationHelper
 
+  before_action :authenticate_user!
   before_action :set_restaurant, only: [:show, :update, :destroy]
 
   # GET /restaurants

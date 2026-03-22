@@ -1,4 +1,5 @@
 class MenuItemsController < ApplicationApiController
+  before_action :authenticate_user!
   before_action :set_restaurant, only: [:index, :create]
   before_action :set_menu_item, only: [:update, :destroy]
 
