@@ -152,7 +152,6 @@ class ApplicationApiController < ActionController::API
     secret = Rails.application.credentials.jwt[:secret_key]
     method = Rails.application.credentials.jwt[:algorithm]
 
-
     begin
       raw = JWT.decode(token, secret, true, { algorithm: method })[0]
       data = raw["data"]
