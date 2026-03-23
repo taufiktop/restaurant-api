@@ -143,33 +143,82 @@ rails test test/controllers/restaurants_controller_test.rb
 ```
 
 ## 📦 Environment Variables
-The application uses environment variables for configuration. You can set them in your shell or use a `.env` file (with the `dotenv-rails` gem).
+This project uses Rails credentials to store sensitive configuration (database credentials, JWT secret) securely. Credentials are encrypted and environment‑specific. Follow these steps to set up the required files.
 
-| Variable           | Description                           | Default
-|--------------------|---------------------------------------|----------------------------|
-| DATABASE_HOST      | PostgreSQL host                       | localhost                  |
-| DATABASE_USERNAME  | PostgreSQL user                       | postgres                   |
-| DATABASE_PASSWORD  | PostgreSQL password                   | (empty)                    |
-| ELASTICSEARCH_URL  | Elasticsearch URL                     | http://localhost:9200      |
-| REDIS_URL          | edis URL (for Sidekiq)                | redis://localhost:6379/0   |
-| JWT_SECRET Jobs    | Secret key for JWT signing (512-bit)  | required                   |
-
-**JWT Secret** – generate a 512‑bit secret (e.g., `openssl rand -base64 364`) and store it in Rails credentials:
+### 1. Create the credentials files
+Run the following commands to open the credentials editor for each environment. If a file doesn’t exist, Rails will create it.
 
 ```bash
-EDITOR=vim rails credentials:edit
+# Development
+rails credentials:edit --environment=development
+
+# Test
+rails credentials:edit --environment=test
+
+# Production
+rails credentials:edit --environment=production
 ```
 
-Add the following:
+### 2. Add configuration for each environment
+Inside the editor that opens, paste the appropriate YAML for the environment you are editing.
+
+Example for development (adjust values as needed):
 ```yaml
+database:
+  host: localhost
+  username: postgres
+  password: postgres
+  port: 5432
+  database: restaurant_dev
+
 jwt:
-  secret_key: "/4M3AUgj3oUAAMQvRS0XyfJlU4shkF6aT8Lykp9vR5I="
+  secret_key: "/4M3AUgj3oUAAMQvRS0XyfJlU4shkF6aT8Lykp9vR5I="   # generate with: openssl rand -base64 64
   subject: "resto-app"
   algorithm: HS512
   issuer: "menu-management"
   expiration: 24.hours.to_i
 ```
 Save and exit.
+
+**Note:** Generate the JWT secret using `openssl rand -base64 64` for a strong 512‑bit secret (64 bytes base64). You can use the same secret across environments or generate separate ones – the choice is yours.
+
+### 3. Update `config/database.yml`
+Replace the content of `config/database.yml` with the following simplified version that reads all database settings from the credentials:
+
+```yaml
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
+
+common: &common
+  host: <%= Rails.application.credentials.database[:host] %>
+  username: <%= Rails.application.credentials.database[:username] %>
+  password: <%= Rails.application.credentials.database[:password] %>
+  port: <%= Rails.application.credentials.database[:port] %>
+  database: <%= Rails.application.credentials.database[:database] %>
+
+development:
+  <<: *default
+  <<: *common
+
+test:
+  <<: *default
+  <<: *common
+
+production:
+  <<: *default
+  <<: *common
+```
+Now your database connection is fully configured through credentials.
+
+## 🔑 Master Keys
+Each credentials file is encrypted with a master key. The keys are stored in:
+- config/credentials/development.key
+- config/credentials/test.key
+- config/credentials/production.key
+
+Do not commit these files to version control. They are already ignored by Git. For production, you must set the environment variable `RAILS_MASTER_KEY` with the content of `config/credentials/production`.key so your application can decrypt the credentials.
 
 ## 📡 API Endpoints Overview
 
@@ -287,7 +336,7 @@ This project is created for the HungryHub take‑home assignment. It is not lice
 ## 🙌 Acknowledgements
 - Ruby on Rails community
 
-- Searchkick (ankane)
+- Searchkick
 
 - JWT gem
 
