@@ -30,7 +30,7 @@ A RESTful API built with Ruby on Rails (API‑only mode) for managing restaurant
 | Background Jobs    | Sidekiq (optional, Redis)                       |
 | Testing            | Minitest                                        |
 | Containerization   | Docker, Docker Compose                          |
-| API Documentation  | Swagger (planned, using swagger-blocks)        |
+| API Documentation  | Swagger (Upcoming, planning using swagger-blocks)        |
 
 ---
 
